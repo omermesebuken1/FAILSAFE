@@ -1,0 +1,47 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "full",
+  "project_summary": "Add Google-Docs-style real-time collaborative editing to an existing solo-focused note-taking app (50k MAU, $5/mo subscription). Estimated 4 months for one engineer. No prior distributed systems experience on the team.",
+  "failure_risks": [
+    {
+      "risk": "Most current users are solo writers (per existing analytics: <8% of notes are ever shared); shipping real-time collab will not move retention or pricing for the existing base, and the cost is paid up front by the team that needs the feature shipped to grow.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test whether the active user base actually wants collab, or whether collab attracts a different (and possibly absent) segment.",
+        "minimum_test": "Ship a 2-week 'share-as-link with comments' feature behind a flag. Email it to the top 5,000 active users. Measure share creates, comment activity, and intent-to-pay-more responses on a survey.",
+        "success_metric": "≥10% of recipients create a share link AND ≥3% of those become recurring sharers (≥3 shares in 14 days) AND ≥20% of sharers say they would pay more for real-time editing.",
+        "failure_threshold": "<3% share creation OR <0.5% recurring sharing OR <5% would-pay-more response.",
+        "next_action": "If pass: build the full real-time feature with confidence in demand. If fail: kill the feature; pivot the roadmap to AI-assisted writing or sync — features the solo segment has actually asked for."
+      }
+    },
+    {
+      "risk": "Real-time collab requires CRDTs or OT, conflict resolution, presence, and a persistent sync server; the team has shipped only single-user features, and the realistic delivery is closer to 8-10 months than 4, putting the company past runway before launch.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "Mixed",
+      "action_map": {
+        "validation_step": "Estimate real delivery time by completing the hardest sub-system end to end before committing the full feature.",
+        "minimum_test": "Two-week spike: integrate Yjs (or Automerge) into a fork of the app and ship cursor presence + concurrent editing on a single document type, deployed to a staging env.",
+        "success_metric": "Spike works for 2 concurrent users on the same doc with no data loss in 100 manual edit-conflict trials, completed within 2 weeks by 1 engineer.",
+        "failure_threshold": "Spike incomplete after 2 weeks OR data loss observed OR engineer estimates >6 months for full production version.",
+        "next_action": "If pass: greenlight the full build with the spike as the foundation. If fail: ditch real-time, ship async collab (comments + share links), or hire/contract a CRDT-experienced engineer before reattempting."
+      }
+    },
+    {
+      "risk": "The benchmark for collab UX is set by Google Docs, Notion, and Figma; users will judge a 50k-MAU indie app against those products on day one, and a partial implementation (laggy cursors, reconnection bugs, mobile gaps) feels worse than not having the feature at all and triggers churn.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Check whether the planned launch quality bar matches what the user base will accept relative to incumbents.",
+        "minimum_test": "Run a closed beta with 50 paying users for 4 weeks at launch quality. Measure NPS specifically on the collab experience, and track unsubscribes during and 30 days after the beta.",
+        "success_metric": "Collab NPS ≥30 AND no statistically significant lift in unsubscribes vs. the control cohort.",
+        "failure_threshold": "Collab NPS <0, OR unsubscribes during beta period >2x control, OR top-3 complaint themes are stability/lag.",
+        "next_action": "If pass: launch broadly. If fail: keep collab in beta-only behind a flag, fix top complaints, and re-test before any public marketing push."
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}

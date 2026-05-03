@@ -1,0 +1,47 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "full",
+  "project_summary": "Subscription web app that generates ATS-optimized resumes for college students using GPT-4. $9/month, freemium with 1 free resume. Solo founder, 6-month runway, marketing via TikTok and campus ambassadors.",
+  "failure_risks": [
+    {
+      "risk": "Target users (broke college students) have near-zero willingness to pay $9/month for a tool whose core function (LLM-rewriting a resume) is available free in ChatGPT, Gemini, and university career portals.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "Mixed",
+      "action_map": {
+        "validation_step": "Test whether students will pay $9/mo when free LLM alternatives exist, or whether the segment must change.",
+        "minimum_test": "Run a 2-week paid landing page with the exact $9/mo offer. Drive 1,000 clicks via TikTok and r/csMajors with the strongest hook the founder can write.",
+        "success_metric": "≥1.5% click-to-paid conversion (15+ paid signups) AND ≥40% week-1 retention.",
+        "failure_threshold": "<0.5% conversion OR <20% week-1 retention OR qualitative feedback dominated by 'I just use ChatGPT'.",
+        "next_action": "If pass: scale acquisition. If fail: pivot to career switchers (30-45yo) who pay 5-10x more for resume help, or to university B2B licensing."
+      }
+    },
+    {
+      "risk": "Real ATS systems (Workday, Greenhouse, Lever) reject creatively formatted PDFs, parse columns wrong, and silently drop content; an AI-generated resume that looks great visually can score worse than a plain Word doc, producing churn the moment a user gets ghosted by employers.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Verify that generated resumes parse correctly in the ATS systems used by the top 50 student employers.",
+        "minimum_test": "Generate 20 resumes across roles, run each through Jobscan and through 3 free ATS parsers. Compare keyword match score against a hand-tuned baseline resume.",
+        "success_metric": "Generated resumes match or beat baseline on parser score in ≥80% of cases AND parse completely (no dropped sections) in 100%.",
+        "failure_threshold": "Generated resumes lose to baseline in >40% of cases OR any section silently drops in parsing.",
+        "next_action": "If pass: ship. If fail: rebuild output as plain-text-first resume with optional styled export, OR delay launch until parsing is fixed."
+      }
+    },
+    {
+      "risk": "GPT-4 API costs at scale plus aggressive freemium convert poorly: with 1 free resume per signup, every viral TikTok spike burns API credit on free users and gross margin collapses below 30% well before the channel matures.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Measure real cost-per-free-user and required free-to-paid conversion at viral acquisition volumes.",
+        "minimum_test": "Cap the free tier at 1 resume with a hard daily ceiling of 500 free generations. Track API cost per free user and free-to-paid conversion over a 2-week TikTok push.",
+        "success_metric": "Cost per free user ≤$0.20 AND free-to-paid conversion ≥4% AND blended gross margin ≥60% at the test volume.",
+        "failure_threshold": "Cost per free user >$0.50, OR free-to-paid <2%, OR margin <40%.",
+        "next_action": "If pass: continue. If fail: switch to email-gated free tier, move to a cheaper model for free users (GPT-4o-mini or Haiku), or remove the free tier entirely."
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}

@@ -1,0 +1,11 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "lite",
+  "project_summary": "Write and finish a first draft of an 80,000-word literary novel in 6 months while working full-time. No outline, no genre.",
+  "failure_risk": {
+    "risk": "Drafting 80,000 words in 26 weeks at 440 words/day, alongside a full-time job and with no outline, will almost certainly stall in the middle of the book.",
+    "root_cause_type": "Execution",
+    "minimum_test": "Run a 4-week pilot at 440 words/day from a 1-page outline. Pass = ≥80% of days on target and ≥10,000 words total."
+  },
+  "final_recommendation": "Pivot"
+}

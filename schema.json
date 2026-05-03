@@ -2,37 +2,62 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://failsafe.protocol/schema.json",
   "title": "FAILSAFE Report",
-  "description": "Output schema for a FAILSAFE protocol evaluation.",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "failsafe_version",
-    "project_summary",
-    "failure_risks",
-    "final_recommendation"
+  "description": "Output schema for a FAILSAFE pre-mortem evaluation. Supports full and lite modes.",
+  "oneOf": [
+    { "$ref": "#/$defs/FullReport" },
+    { "$ref": "#/$defs/LiteReport" }
   ],
-  "properties": {
-    "failsafe_version": {
-      "type": "string",
-      "const": "0.1"
-    },
-    "project_summary": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Concise restatement of the project as-is. No redesign."
-    },
-    "failure_risks": {
-      "type": "array",
-      "minItems": 3,
-      "maxItems": 3,
-      "items": { "$ref": "#/$defs/Risk" }
-    },
-    "final_recommendation": {
-      "type": "string",
-      "enum": ["Continue", "Pivot", "Kill"]
-    }
-  },
   "$defs": {
+    "FullReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "failsafe_version",
+        "mode",
+        "project_summary",
+        "failure_risks",
+        "final_recommendation"
+      ],
+      "properties": {
+        "failsafe_version": { "type": "string", "const": "0.2" },
+        "mode": { "type": "string", "const": "full" },
+        "project_summary": { "type": "string", "minLength": 1 },
+        "failure_risks": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/Risk" }
+        },
+        "final_recommendation": { "$ref": "#/$defs/Recommendation" }
+      }
+    },
+    "LiteReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "failsafe_version",
+        "mode",
+        "project_summary",
+        "failure_risk",
+        "final_recommendation"
+      ],
+      "properties": {
+        "failsafe_version": { "type": "string", "const": "0.2" },
+        "mode": { "type": "string", "const": "lite" },
+        "project_summary": { "type": "string", "minLength": 1 },
+        "failure_risk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["risk", "root_cause_type", "minimum_test"],
+          "properties": {
+            "risk": { "type": "string", "minLength": 1 },
+            "root_cause_type": { "$ref": "#/$defs/RootCauseType" },
+            "minimum_test": { "type": "string", "minLength": 1 }
+          }
+        },
+        "final_recommendation": { "$ref": "#/$defs/Recommendation" }
+      }
+    },
     "Risk": {
       "type": "object",
       "additionalProperties": false,
@@ -44,15 +69,8 @@
         "action_map"
       ],
       "properties": {
-        "risk": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Specific, critical failure mode. Not generic."
-        },
-        "root_cause_type": {
-          "type": "string",
-          "enum": ["Concept", "Execution", "Environment"]
-        },
+        "risk": { "type": "string", "minLength": 1 },
+        "root_cause_type": { "$ref": "#/$defs/RootCauseType" },
         "solvable": { "type": "boolean" },
         "solver": {
           "type": "string",
@@ -74,9 +92,7 @@
           "if": { "properties": { "solvable": { "const": true } } },
           "then": {
             "properties": {
-              "solver": {
-                "enum": ["User", "AI", "External", "Mixed"]
-              },
+              "solver": { "enum": ["User", "AI", "External", "Mixed"] },
               "action_map": { "$ref": "#/$defs/PopulatedActionMap" }
             }
           }
@@ -128,6 +144,14 @@
           }
         }
       ]
+    },
+    "RootCauseType": {
+      "type": "string",
+      "enum": ["Concept", "Execution", "Environment"]
+    },
+    "Recommendation": {
+      "type": "string",
+      "enum": ["Continue", "Pivot", "Kill"]
     }
   }
 }

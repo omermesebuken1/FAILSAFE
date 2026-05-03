@@ -1,54 +1,56 @@
 # FAILSAFE
 
-A structured pre-mortem protocol for AI-assisted project evaluation.
+> If it fails, why?
 
-> Instead of asking "Is this a good idea?", FAILSAFE asks "If this fails, why will it fail?"
-
-## What It Is
-
-FAILSAFE evaluates the **current version** of a project and decides whether it can survive real-world execution. It produces:
-
-- A short project summary
-- Exactly 3 critical failure risks with root cause types
-- Solvability + solver assignment per risk
-- A concrete action map for each solvable risk
-- A final decision: **Continue**, **Pivot**, or **Kill**
-
-It is a survival system, not a motivation tool. Output is brutally honest.
-
-## Files
-
-| File | Purpose |
-|------|---------|
-| `FAILSAFE.md` | Full protocol specification |
-| `CLAUDE.md` | Execution rules for Claude Code |
-| `schema.json` | JSON Schema for the report output |
-| `examples/diy-youtube-patreon.json` | Example FAILSAFE report |
-
-## Usage
-
-In Claude Code (or any compatible AI agent), invoke the protocol with one of:
-
-- `Run FAILSAFE`
-- `FAILSAFE this`
-- `Generate FAILSAFE report`
-
-Then describe the project. Example:
+A 3-risk pre-mortem you run **before** you commit code, time, or money.
 
 ```
-Project:
-AI-powered mechanical DIY YouTube + Patreon business
-
-Run FAILSAFE.
+FAILSAFE = 3 risks  →  3 action maps  →  1 decision (Continue | Pivot | Kill)
 ```
 
-The agent returns a JSON report conforming to `schema.json`.
+Like SMART for goals or SOLID for code — a thinking primitive you can call by name.
 
-## Output Contract
+---
+
+## The Five Laws
+
+1. **Rule of Three** — Exactly 3 risks. Not 2. Not 5. Force prioritization.
+2. **Specificity** — Name a concrete failure mode. *"Might be hard"* is not a risk.
+3. **Falsifiability** — Every solvable risk needs a test that can pass or fail.
+4. **Honesty** — Optimize for survival, not optimism. Soften nothing.
+5. **Decision** — End in **Continue**, **Pivot**, or **Kill**. No "maybe."
+
+A FAILSAFE that breaks any law is invalid.
+
+---
+
+## Invocation
+
+Any of these triggers it:
+
+```
+FAILSAFE [project]
+Run FAILSAFE on [project]
+FAILSAFE this: [project]
+/failsafe [project]
+```
+
+Lightweight (1 risk, daily use):
+
+```
+FAILSAFE-lite [project]
+```
+
+The verb is the protocol. You should be able to say *"I FAILSAFE'd it"* and be understood.
+
+---
+
+## Output (Full Mode)
 
 ```json
 {
-  "failsafe_version": "0.1",
+  "failsafe_version": "0.2",
+  "mode": "full",
   "project_summary": "...",
   "failure_risks": [
     {
@@ -69,19 +71,65 @@ The agent returns a JSON report conforming to `schema.json`.
 }
 ```
 
-Constraints:
-- Exactly 3 risks. Not 2. Not 4.
-- If `solvable: false`, then `solver: "None"` and the `action_map` fields are empty strings.
-- If `solvable: true`, all five action map fields must be populated.
+## Output (Lite Mode)
+
+```json
+{
+  "failsafe_version": "0.2",
+  "mode": "lite",
+  "project_summary": "...",
+  "failure_risk": { "risk": "...", "minimum_test": "..." },
+  "final_recommendation": "Continue | Pivot | Kill"
+}
+```
+
+---
 
 ## Decision Logic
 
-| Condition | Recommendation |
-|-----------|----------------|
-| All 3 risks solvable with reasonable effort | Continue |
-| ≥1 critical risk threatens direction, core idea survives changes | Pivot |
-| Core assumption invalid OR ≥2 risks unsolvable | Kill |
+| State | Recommendation |
+|---|---|
+| All risks solvable with reasonable effort | **Continue** |
+| ≥1 critical risk threatens the direction, core idea survives changes | **Pivot** |
+| Core assumption invalid OR ≥2 risks unsolvable | **Kill** |
+
+---
+
+## Examples
+
+| Domain | File |
+|---|---|
+| Startup | [`examples/startup-resume-builder.json`](examples/startup-resume-builder.json) |
+| Software feature | [`examples/feature-realtime-collab.json`](examples/feature-realtime-collab.json) |
+| Personal goal | [`examples/personal-novel.json`](examples/personal-novel.json) |
+| Lite mode | [`examples/lite-novel.json`](examples/lite-novel.json) |
+
+---
+
+## Anti-Patterns
+
+A bad FAILSAFE looks like:
+
+- **Generic** — *"Execution might be difficult."* → name the bottleneck.
+- **Optimistic** — *"All risks are solvable, just work harder."* → not a test.
+- **Bloated** — 7 risks because you wanted to be thorough. → violates Rule of Three.
+- **Indecisive** — *"Maybe Continue, leaning Pivot."* → pick one.
+- **Unfalsifiable** — *"Validate product-market fit."* → define the metric and threshold.
+- **Redesigned** — solving the project before evaluating it. → evaluate as-is.
+
+If your FAILSAFE could be copy-pasted to any other project, it's wrong.
+
+---
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `FAILSAFE.md` | Canonical spec |
+| `CLAUDE.md` | Execution rules for AI agents |
+| `schema.json` | Output contract (full + lite) |
+| `examples/` | Reference reports |
 
 ## Version
 
-FAILSAFE v0.1
+FAILSAFE v0.2

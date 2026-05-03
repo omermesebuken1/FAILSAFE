@@ -2,65 +2,78 @@
 
 ## Project: FAILSAFE Protocol
 
-This repository defines the FAILSAFE protocol — a structured pre-mortem system for evaluating projects, ideas, features, and goals.
-
-The full specification lives in `FAILSAFE.md`. The output JSON schema is in `schema.json`.
+This repository defines the **FAILSAFE protocol** — a 3-risk pre-mortem ending in a Continue / Pivot / Kill decision. Canonical spec is in `FAILSAFE.md`. Output schema is `schema.json`.
 
 ---
 
-## Activation Triggers
+## Activation
 
-When the user types ANY of the following, you MUST execute the FAILSAFE protocol on the project they describe:
+Execute the protocol immediately when the user types any of these:
 
-- "Run FAILSAFE"
-- "FAILSAFE this"
-- "Generate FAILSAFE report"
-- "/failsafe"
+**Full mode** (3 risks):
+- `FAILSAFE <project>`
+- `Run FAILSAFE on <project>`
+- `FAILSAFE this: <project>`
+- `/failsafe <project>`
+- `Generate FAILSAFE report`
 
-If the user provides a project description without an explicit trigger, ask once whether they want a FAILSAFE evaluation. Do not auto-run.
+**Lite mode** (1 risk):
+- `FAILSAFE-lite <project>`
+- `/failsafe-lite <project>`
 
----
-
-## Execution Rules
-
-When FAILSAFE is invoked:
-
-1. Read the project input as the **current version**. Do not redesign or improve it before evaluating.
-2. Identify EXACTLY 3 critical failure risks. Not 2. Not 4.
-3. For each risk, assign:
-   - One root cause type: `Concept`, `Execution`, or `Environment`
-   - Solvability: `true` or `false`
-   - Solver: `User`, `AI`, `External`, `Mixed`, or `None`
-   - An action map (only if solvable) with all five fields populated
-4. Make a final decision: `Continue`, `Pivot`, or `Kill`.
-5. Output JSON ONLY, conforming to `schema.json`. No prose before or after the JSON block.
+If the user describes a project without an explicit trigger, ask once whether they want a FAILSAFE evaluation. Do not auto-run.
 
 ---
 
-## Decision Logic
+## The Five Laws (Validity Rules)
 
-- `Continue` → All 3 risks are solvable with reasonable effort.
-- `Pivot` → At least 1 critical risk threatens the current direction, but the core idea survives with changes.
-- `Kill` → Core assumption is invalid, OR 2+ risks are not realistically solvable.
+Every output you produce must satisfy all five:
 
----
+1. **Rule of Three** — full mode has exactly 3 risks; lite has exactly 1.
+2. **Specificity** — each risk names a concrete failure mode in this project's terms.
+3. **Falsifiability** — every solvable risk has a test with a clear pass/fail.
+4. **Honesty** — no softening, hedging, or motivational framing.
+5. **Decision** — final recommendation is exactly one of: Continue, Pivot, Kill.
 
-## Tone Constraints
-
-- Brutal honesty. No politeness padding. No motivational framing.
-- Do not soften risks to spare feelings.
-- Do not hallucinate market data, statistics, or competitor names.
-- Specificity beats coverage. "Solo creator cannot sustain 3 videos/week with 40hr edit cycle" beats "execution might be hard".
+If you cannot satisfy a law, fix the report — do not ship it.
 
 ---
 
-## Anti-Patterns
+## Execution Steps
 
-Do NOT:
-- Generate fewer or more than 3 risks
-- Use vague language like "might fail" or "could be challenging"
-- Suggest solutions before identifying the failure mode
-- Add extra fields to the JSON output
-- Wrap the JSON in commentary, headers, or markdown code fences when the user expects the structured output
+1. Read the project as the **current version**. Do not redesign before evaluating.
+2. Identify risks (3 for full, 1 for lite). Cover at least two of {Concept, Execution, Environment} in full mode when possible.
+3. For each risk, set:
+   - `root_cause_type` ∈ {Concept, Execution, Environment}
+   - `solvable` ∈ {true, false}
+   - `solver` ∈ {User, AI, External, Mixed, None}
+   - `action_map` — populated if solvable, empty strings if not.
+4. Apply decision logic:
+   - **Continue** — all risks solvable with reasonable effort.
+   - **Pivot** — ≥1 critical risk threatens direction; core survives changes.
+   - **Kill** — core assumption invalid OR ≥2 risks unsolvable.
+5. Output JSON only, conforming to `schema.json`. No prose before or after.
 
-Always validate the output mentally against `schema.json` before responding.
+---
+
+## Anti-Patterns (Reject These)
+
+Do NOT produce:
+- Generic risks ("might be hard", "competition is tough")
+- More or fewer risks than the mode requires
+- Risks that restate the project goal instead of a failure mode
+- Action maps with vague metrics ("validate PMF", "iterate until good")
+- Hedged decisions ("maybe Continue")
+- Hallucinated market data, statistics, or competitor names
+- Markdown commentary wrapping the JSON
+
+If your output could be copy-pasted to a different project, it is wrong. Rewrite.
+
+---
+
+## Tone
+
+- Brutal honesty over politeness.
+- Specificity over coverage.
+- Survival over optimism.
+- JSON over prose.
