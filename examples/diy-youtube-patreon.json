@@ -1,0 +1,46 @@
+{
+  "failsafe_version": "0.1",
+  "project_summary": "Solo creator launches an AI-powered mechanical DIY YouTube channel with a Patreon tier for paid tutorials, scripts, and CAD files. Revenue depends on YouTube ad share, Patreon subscriptions, and affiliate links. Production assumes weekly long-form videos plus a Patreon-exclusive deep-dive each month.",
+  "failure_risks": [
+    {
+      "risk": "Weekly long-form mechanical DIY video output is unsustainable for a solo creator who must source parts, build, film, edit, and write scripts; burnout or schedule slippage will collapse the algorithmic momentum YouTube growth depends on.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test whether the creator can ship 4 publishable mechanical DIY videos in 4 consecutive weeks without external help, while tracking real hours per video.",
+        "minimum_test": "Run a 4-week production sprint: produce and publish 4 videos using only the tools, parts budget, and time the creator currently has. Log every hour spent on sourcing, building, filming, editing, thumbnails, and writing.",
+        "success_metric": "All 4 videos shipped on schedule with average production time at or below 25 hours per video and creator self-rated burnout risk under 6/10.",
+        "failure_threshold": "Any missed publish date, average production time above 35 hours per video, or burnout score 8/10+ at the end of week 4.",
+        "next_action": "If success: lock in weekly cadence and begin building 2-week content buffer. If failure: drop to biweekly cadence, narrow video scope, or hire an editor before launch."
+      }
+    },
+    {
+      "risk": "The 'AI-powered' angle is undifferentiated and may not translate to Patreon willingness-to-pay; mechanical DIY audiences tend to value craftsmanship and authenticity, not AI-generated scripts or designs, so the paid tier may attract subscribers at a rate too low to sustain the project.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "Mixed",
+      "action_map": {
+        "validation_step": "Test whether the target audience will actually pay for AI-augmented mechanical DIY content vs. treating AI as a turnoff.",
+        "minimum_test": "Before launching the channel, post 3 sample videos and a Patreon landing page describing the paid tier explicitly (AI-assisted CAD files, AI-generated build variations, prompt walkthroughs). Drive 1,000 targeted clicks via Reddit, niche forums, and paid ads.",
+        "success_metric": "At least 2% landing-page-to-email conversion AND 0.5% landing-page-to-paid conversion within 30 days of the test.",
+        "failure_threshold": "Conversion below 1% to email or zero paid signups after 1,000 clicks; OR qualitative comments dominated by AI skepticism.",
+        "next_action": "If success: proceed with AI angle as a primary differentiator. If failure: pivot positioning so AI is a behind-the-scenes tool rather than the brand, and reframe the Patreon tier around build files, member Q&A, and early access."
+      }
+    },
+    {
+      "risk": "Revenue model concentrates on two platforms (YouTube and Patreon) whose policies on AI-generated content, monetization, and adult/dangerous mechanical builds are tightening; a single demonetization event or policy change can cut income to near-zero with no recourse.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "External",
+      "action_map": {
+        "validation_step": "Confirm that the planned content format complies with current YouTube and Patreon policies on AI disclosure, monetization eligibility, and dangerous activity guidelines, AND that the creator has a viable off-platform fallback channel.",
+        "minimum_test": "Submit the first 3 finished videos through YouTube's monetization review and apply for a Patreon creator account with full disclosure of the AI-augmented format. In parallel, set up an email list and a self-hosted store as a backup distribution path.",
+        "success_metric": "Both platforms approve the content for monetization without restrictions, AND the email list captures at least 200 subscribers in the first 60 days.",
+        "failure_threshold": "Either platform restricts monetization, demands format changes that conflict with the value proposition, or the email list grows below 50 subscribers in 60 days.",
+        "next_action": "If success: maintain the email list as a permanent off-platform asset and continue. If failure: rebuild the model around direct sales, Skool/Discord community, or a paid newsletter before scaling."
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}

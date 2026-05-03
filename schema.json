@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://failsafe.protocol/schema.json",
+  "title": "FAILSAFE Report",
+  "description": "Output schema for a FAILSAFE protocol evaluation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "failsafe_version",
+    "project_summary",
+    "failure_risks",
+    "final_recommendation"
+  ],
+  "properties": {
+    "failsafe_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "project_summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Concise restatement of the project as-is. No redesign."
+    },
+    "failure_risks": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/Risk" }
+    },
+    "final_recommendation": {
+      "type": "string",
+      "enum": ["Continue", "Pivot", "Kill"]
+    }
+  },
+  "$defs": {
+    "Risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "risk",
+        "root_cause_type",
+        "solvable",
+        "solver",
+        "action_map"
+      ],
+      "properties": {
+        "risk": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Specific, critical failure mode. Not generic."
+        },
+        "root_cause_type": {
+          "type": "string",
+          "enum": ["Concept", "Execution", "Environment"]
+        },
+        "solvable": { "type": "boolean" },
+        "solver": {
+          "type": "string",
+          "enum": ["User", "AI", "External", "Mixed", "None"]
+        },
+        "action_map": { "$ref": "#/$defs/ActionMap" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "solvable": { "const": false } } },
+          "then": {
+            "properties": {
+              "solver": { "const": "None" },
+              "action_map": { "$ref": "#/$defs/EmptyActionMap" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "solvable": { "const": true } } },
+          "then": {
+            "properties": {
+              "solver": {
+                "enum": ["User", "AI", "External", "Mixed"]
+              },
+              "action_map": { "$ref": "#/$defs/PopulatedActionMap" }
+            }
+          }
+        }
+      ]
+    },
+    "ActionMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validation_step",
+        "minimum_test",
+        "success_metric",
+        "failure_threshold",
+        "next_action"
+      ],
+      "properties": {
+        "validation_step": { "type": "string" },
+        "minimum_test": { "type": "string" },
+        "success_metric": { "type": "string" },
+        "failure_threshold": { "type": "string" },
+        "next_action": { "type": "string" }
+      }
+    },
+    "PopulatedActionMap": {
+      "allOf": [
+        { "$ref": "#/$defs/ActionMap" },
+        {
+          "properties": {
+            "validation_step": { "minLength": 1 },
+            "minimum_test": { "minLength": 1 },
+            "success_metric": { "minLength": 1 },
+            "failure_threshold": { "minLength": 1 },
+            "next_action": { "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "EmptyActionMap": {
+      "allOf": [
+        { "$ref": "#/$defs/ActionMap" },
+        {
+          "properties": {
+            "validation_step": { "const": "" },
+            "minimum_test": { "const": "" },
+            "success_metric": { "const": "" },
+            "failure_threshold": { "const": "" },
+            "next_action": { "const": "" }
+          }
+        }
+      ]
+    }
+  }
+}
