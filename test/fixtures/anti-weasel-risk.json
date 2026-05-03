@@ -1,0 +1,47 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "full",
+  "project_summary": "B2B SaaS launch into a saturated note-taking market with a 2-person team and 9-month runway.",
+  "failure_risks": [
+    {
+      "risk": "The product launch into the saturated note-taking market might be hard given limited engineering resources and a 9-month runway window.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Estimate real engineering throughput against the launch scope.",
+        "minimum_test": "Run a 4-week sprint shipping the MVP feature list and measure completion.",
+        "success_metric": "100% of MVP scope shipped in 4 weeks with under 5 bugs.",
+        "failure_threshold": "Less than 60% of MVP scope shipped or more than 15 bugs.",
+        "next_action": "If pass: launch. If fail: cut scope or extend runway."
+      }
+    },
+    {
+      "risk": "Direct competition from incumbents like Notion and Obsidian could be tough for a 2-person team to overcome in the first 12 months of operation.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Quantify the differentiation gap relative to incumbents.",
+        "minimum_test": "Survey 50 prospects on willingness to switch from incumbent tools.",
+        "success_metric": "30% of surveyed prospects say they would switch within 6 months.",
+        "failure_threshold": "Below 10% switch intent.",
+        "next_action": "If pass: ship. If fail: niche the positioning to a single underserved vertical."
+      }
+    },
+    {
+      "risk": "User acquisition through TikTok ads could be challenging if the algorithm shifts and CPMs rise above $20 in the next quarter, killing payback periods.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Lock in current CPM economics with a 30-day spend test.",
+        "minimum_test": "Spend $3,000 on TikTok ads over 30 days and measure CAC and payback.",
+        "success_metric": "CAC under $25 and payback under 3 months.",
+        "failure_threshold": "CAC above $50 or payback above 9 months.",
+        "next_action": "If pass: scale spend. If fail: switch acquisition channel to SEO or partnerships."
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}

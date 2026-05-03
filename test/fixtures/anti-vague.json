@@ -1,0 +1,47 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "full",
+  "project_summary": "A startup making a B2B SaaS product for mid-market customers.",
+  "failure_risks": [
+    {
+      "risk": "Hard to execute.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test execution capacity over 4 weeks.",
+        "minimum_test": "Ship 4 features in 4 weeks.",
+        "success_metric": "All 4 features shipped on time with 0 P0 bugs.",
+        "failure_threshold": "Fewer than 2 features shipped.",
+        "next_action": "If pass: continue. If fail: cut scope to 2 features per month."
+      }
+    },
+    {
+      "risk": "Wrong fit.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Confirm customer interest with 20 interviews.",
+        "minimum_test": "Run 20 customer discovery calls in 3 weeks.",
+        "success_metric": "10 of 20 prospects ask for a follow-up demo.",
+        "failure_threshold": "Fewer than 4 of 20 prospects show interest.",
+        "next_action": "If pass: build MVP. If fail: change ICP."
+      }
+    },
+    {
+      "risk": "Competitors exist.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Quantify the differentiation gap.",
+        "minimum_test": "Build a feature matrix vs. top 5 competitors and survey 30 prospects.",
+        "success_metric": "At least 60% of prospects rate our value prop above competitors.",
+        "failure_threshold": "Below 30% prefer our value prop.",
+        "next_action": "If pass: ship. If fail: rework positioning."
+      }
+    }
+  ],
+  "final_recommendation": "Continue"
+}

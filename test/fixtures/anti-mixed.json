@@ -1,0 +1,47 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "full",
+  "project_summary": "Open-source project hoping to attract contributors and become a recognized standard in its category.",
+  "failure_risks": [
+    {
+      "risk": "Hard to grow.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test growth via launch posts.",
+        "minimum_test": "Post on HN, dev.to, and Reddit in one week.",
+        "success_metric": "150 GitHub stars within 30 days of launch.",
+        "failure_threshold": "Below 30 stars in 30 days.",
+        "next_action": "If pass: invest in content. If fail: reposition."
+      }
+    },
+    {
+      "risk": "Adoption among developers and product teams might be hard given the saturated landscape of competing frameworks and the time it takes to build a recognizable brand.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Validate PMF.",
+        "minimum_test": "Run a 4-week awareness campaign on dev social platforms.",
+        "success_metric": "feels good",
+        "failure_threshold": "doesn't feel good",
+        "next_action": "Iterate until good."
+      }
+    },
+    {
+      "risk": "The protocol depends on AI tools recognizing the trigger phrase out of the box, but no major AI surface knows the protocol today, so the entire 'callable primitive' framing is unproven outside this repository.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test recognition on cold AI sessions.",
+        "minimum_test": "Send the trigger phrase to ChatGPT, Claude.ai, and Cursor with no context, 10 times each.",
+        "success_metric": "At least 1 of 3 surfaces produces a schema-valid report 8 of 10 times.",
+        "failure_threshold": "Zero surfaces produce a valid report.",
+        "next_action": "If pass: invest in distribution. If fail: build a Custom GPT and CLI."
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}

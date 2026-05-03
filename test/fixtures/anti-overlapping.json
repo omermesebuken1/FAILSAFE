@@ -1,0 +1,47 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "full",
+  "project_summary": "Solo creator launching a weekly mechanical DIY YouTube channel with a Patreon tier, planning 52 videos in the first year alongside a full-time job.",
+  "failure_risks": [
+    {
+      "risk": "Solo creator cannot sustain weekly mechanical DIY YouTube video production due to limited time and budget across 52 weeks of consistent output.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test sustainable production cadence over a 4-week pilot.",
+        "minimum_test": "Produce and publish 4 videos in 4 weeks while tracking hours.",
+        "success_metric": "All 4 videos shipped on time at under 25 hours each.",
+        "failure_threshold": "Any missed publish date or average above 35 hours per video.",
+        "next_action": "If pass: continue weekly cadence. If fail: drop to biweekly."
+      }
+    },
+    {
+      "risk": "Weekly mechanical DIY YouTube video production cannot be sustained by a solo creator with limited time and limited budget over a 52-week schedule.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Confirm production capacity with a real test.",
+        "minimum_test": "Track 4 weeks of output at the planned cadence.",
+        "success_metric": "Hit the cadence in 4 of 4 weeks with budget under $400 per video.",
+        "failure_threshold": "Miss cadence or exceed $600 per video.",
+        "next_action": "If pass: continue. If fail: cut scope."
+      }
+    },
+    {
+      "risk": "Solo creator's weekly mechanical DIY YouTube video production schedule is limited by available time and budget constraints over the planned 52-week run.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Pilot the planned schedule.",
+        "minimum_test": "Run the 4-week pilot at full cadence.",
+        "success_metric": "Pilot completes with 4 of 4 videos shipped under budget.",
+        "failure_threshold": "Pilot misses any week or exceeds budget by more than 25%.",
+        "next_action": "If pass: scale up. If fail: rescope."
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}

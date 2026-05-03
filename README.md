@@ -121,6 +121,32 @@ If your FAILSAFE could be copy-pasted to any other project, it's wrong.
 
 ---
 
+## Tooling
+
+A zero-dependency Node CLI ships with the repo:
+
+```bash
+# from inside the repo
+node bin/failsafe.js lint examples/personal-novel.json
+
+# or via npm
+npm test                                       # run the linter test suite
+node bin/failsafe.js lint <report.json>...     # lint one or more reports
+```
+
+The linter enforces what `schema.json` cannot:
+
+| Rule | Catches |
+|---|---|
+| `specificity-length` | Risk strings under 80 chars |
+| `weasel` | "might be hard", "iterate until good", "validate PMF", "just work harder", etc. |
+| `falsifiability` | `success_metric` / `failure_threshold` / `minimum_test` with no numeric or observable predicate |
+| `independence` | Risks that share ≥50% non-stopword tokens (proxy for semantic overlap) |
+| `rule-of-three` | Full-mode reports without exactly 3 risks |
+| `structure` | Missing fields, wrong version, invalid mode |
+
+On the bundled labeled set (4 valid examples + 6 anti-pattern fixtures), the linter scores **precision 1.00, recall 1.00** — well above the 0.85 bar set by the protocol's own pre-mortem.
+
 ## Files
 
 | File | Purpose |
@@ -129,6 +155,8 @@ If your FAILSAFE could be copy-pasted to any other project, it's wrong.
 | `CLAUDE.md` | Execution rules for AI agents |
 | `schema.json` | Output contract (full + lite) |
 | `examples/` | Reference reports |
+| `bin/`, `src/` | Linter CLI |
+| `test/` | Test suite + anti-pattern fixtures |
 
 ## Version
 

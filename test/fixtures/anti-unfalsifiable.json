@@ -1,0 +1,47 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "full",
+  "project_summary": "Internal developer platform for a 200-person engineering org, built by a 4-person platform team to consolidate CI, CD, and observability.",
+  "failure_risks": [
+    {
+      "risk": "Adoption of the internal platform requires 200 engineers to migrate off existing tools; without a forcing function, voluntary migration will stall at low single-digit teams and the platform will be perceived as failed within 18 months.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Determine whether voluntary adoption can reach critical mass.",
+        "minimum_test": "Onboard 5 pilot teams over 8 weeks without executive mandate.",
+        "success_metric": "users seem happy with it",
+        "failure_threshold": "feels bad",
+        "next_action": "see how it goes"
+      }
+    },
+    {
+      "risk": "The platform team of four cannot maintain breadth (CI, CD, and observability) plus build new features; the realistic delivery pace will fall below what staff engineers expect from internal tooling, eroding trust within the first year.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Forecast team capacity against the planned scope.",
+        "minimum_test": "Estimate maintenance burden for the existing toolchain and reserve 60% of team time for it.",
+        "success_metric": "team feels productive",
+        "failure_threshold": "team feels overwhelmed",
+        "next_action": "adjust based on results"
+      }
+    },
+    {
+      "risk": "Cloud infrastructure costs for running the platform may exceed the savings from tool consolidation; without an explicit cost model, the platform may end up more expensive than the SaaS tools it replaces, killing executive support.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Build a 12-month cost projection comparing platform spend vs. status quo.",
+        "minimum_test": "Run the platform for 30 days at production scale and measure compute spend.",
+        "success_metric": "cheaper than current setup",
+        "failure_threshold": "more expensive overall",
+        "next_action": "review with finance"
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}

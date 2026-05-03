@@ -1,0 +1,47 @@
+{
+  "failsafe_version": "0.2",
+  "mode": "full",
+  "project_summary": "A consumer mobile app for habit tracking targeting 18-30 year olds, freemium model with $4.99/mo Pro tier.",
+  "failure_risks": [
+    {
+      "risk": "Habit-tracking app market is saturated with free incumbents (Streaks, Habitica, Loop), which compresses willingness to pay for the Pro tier and depresses LTV below CAC at any reasonable acquisition cost.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test paid conversion against the free incumbents.",
+        "minimum_test": "Run a 30-day paid acquisition test with $5,000 spend.",
+        "success_metric": "Free-to-paid conversion above 3% and CAC under $15.",
+        "failure_threshold": "Conversion below 1% or CAC above $40.",
+        "next_action": "Iterate until good."
+      }
+    },
+    {
+      "risk": "The Pro feature set is undefined and not validated against actual willingness to pay; without a clear paid feature, freemium users will not convert and the unit economics collapse before retention compounds.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Validate PMF on the Pro feature set.",
+        "minimum_test": "Run a Wizard of Oz test of 3 candidate Pro features over 2 weeks.",
+        "success_metric": "30% of beta users select at least one Pro feature as must-have.",
+        "failure_threshold": "Below 10% must-have selection on all candidates.",
+        "next_action": "If pass: build the winning feature. If fail: rethink the Pro tier entirely."
+      }
+    },
+    {
+      "risk": "Retention on habit-tracking apps drops 80% by week 4 across the category; without an intervention specifically designed to combat this, the freemium funnel will not produce enough paid users to sustain growth.",
+      "root_cause_type": "Execution",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test the retention mechanic against category benchmarks.",
+        "minimum_test": "Cohort analysis on 500 beta users over 4 weeks with the new mechanic.",
+        "success_metric": "Week-4 retention above 30%.",
+        "failure_threshold": "Week-4 retention below 15%.",
+        "next_action": "Just work harder on engagement."
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}
