@@ -123,15 +123,42 @@ If your FAILSAFE could be copy-pasted to any other project, it's wrong.
 
 ## Tooling
 
-A zero-dependency Node CLI ships with the repo:
+A zero-dependency Node CLI ships with the repo and as an npm package.
+
+### Install FAILSAFE into any repo
 
 ```bash
-# from inside the repo
-node bin/failsafe.js lint examples/personal-novel.json
+npx failsafe-protocol init
+```
 
-# or via npm
-npm test                                       # run the linter test suite
-node bin/failsafe.js lint <report.json>...     # lint one or more reports
+Drops the protocol bundle into `.failsafe/` in the current directory:
+
+```
+.failsafe/
+  FAILSAFE.md   ← canonical spec
+  CLAUDE.md     ← AI agent instructions
+  schema.json   ← output contract
+```
+
+Then wire it into your AI tool of choice:
+
+| Tool | One-line setup |
+|---|---|
+| Claude Code | Add `@.failsafe/CLAUDE.md` to your `CLAUDE.md` |
+| Cursor | Append `.failsafe/CLAUDE.md` contents to `.cursorrules` |
+| Other agents | Include `.failsafe/CLAUDE.md` in the system prompt |
+
+After that: `Run FAILSAFE on <project description>` produces a schema-valid report.
+
+`init` is non-destructive — it only writes inside `.failsafe/` and skips existing files unless `--force` is passed.
+
+### Lint a report
+
+```bash
+npx failsafe-protocol lint report.json
+# or, from inside this repo:
+node bin/failsafe.js lint examples/personal-novel.json
+npm test                                       # run the full test suite
 ```
 
 The linter enforces what `schema.json` cannot:

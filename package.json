@@ -6,7 +6,7 @@
     "failsafe": "bin/failsafe.js"
   },
   "scripts": {
-    "test": "node --test test/lint.test.js"
+    "test": "node --test test/lint.test.js test/init.test.js"
   },
   "files": [
     "bin",
