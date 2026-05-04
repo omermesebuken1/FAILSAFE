@@ -1,6 +1,5 @@
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "A startup making a B2B SaaS product for mid-market customers.",
   "failure_risks": [
     {

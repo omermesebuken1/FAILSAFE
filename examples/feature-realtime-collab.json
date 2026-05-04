@@ -1,6 +1,5 @@
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "Add Google-Docs-style real-time collaborative editing to an existing solo-focused note-taking app (50k MAU, $5/mo subscription). Estimated 4 months for one engineer. No prior distributed systems experience on the team.",
   "failure_risks": [
     {

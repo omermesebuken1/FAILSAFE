@@ -1,6 +1,5 @@
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "B2B SaaS launch into a saturated note-taking market with a 2-person team and 9-month runway.",
   "failure_risks": [
     {

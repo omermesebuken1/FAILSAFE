@@ -2,62 +2,27 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://failsafe.protocol/schema.json",
   "title": "FAILSAFE Report",
-  "description": "Output schema for a FAILSAFE pre-mortem evaluation. Supports full and lite modes.",
-  "oneOf": [
-    { "$ref": "#/$defs/FullReport" },
-    { "$ref": "#/$defs/LiteReport" }
+  "description": "Output schema for a FAILSAFE anti-failure pre-mortem. Up to 3 critical failure risks, no padding.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "failsafe_version",
+    "project_summary",
+    "failure_risks",
+    "final_recommendation"
   ],
+  "properties": {
+    "failsafe_version": { "type": "string", "const": "0.3" },
+    "project_summary": { "type": "string", "minLength": 1 },
+    "failure_risks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/Risk" }
+    },
+    "final_recommendation": { "$ref": "#/$defs/Recommendation" }
+  },
   "$defs": {
-    "FullReport": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "failsafe_version",
-        "mode",
-        "project_summary",
-        "failure_risks",
-        "final_recommendation"
-      ],
-      "properties": {
-        "failsafe_version": { "type": "string", "const": "0.2" },
-        "mode": { "type": "string", "const": "full" },
-        "project_summary": { "type": "string", "minLength": 1 },
-        "failure_risks": {
-          "type": "array",
-          "minItems": 3,
-          "maxItems": 3,
-          "items": { "$ref": "#/$defs/Risk" }
-        },
-        "final_recommendation": { "$ref": "#/$defs/Recommendation" }
-      }
-    },
-    "LiteReport": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "failsafe_version",
-        "mode",
-        "project_summary",
-        "failure_risk",
-        "final_recommendation"
-      ],
-      "properties": {
-        "failsafe_version": { "type": "string", "const": "0.2" },
-        "mode": { "type": "string", "const": "lite" },
-        "project_summary": { "type": "string", "minLength": 1 },
-        "failure_risk": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["risk", "root_cause_type", "minimum_test"],
-          "properties": {
-            "risk": { "type": "string", "minLength": 1 },
-            "root_cause_type": { "$ref": "#/$defs/RootCauseType" },
-            "minimum_test": { "type": "string", "minLength": 1 }
-          }
-        },
-        "final_recommendation": { "$ref": "#/$defs/Recommendation" }
-      }
-    },
     "Risk": {
       "type": "object",
       "additionalProperties": false,

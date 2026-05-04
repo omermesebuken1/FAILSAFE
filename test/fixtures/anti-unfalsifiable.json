@@ -1,6 +1,5 @@
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "Internal developer platform for a 200-person engineering org, built by a 4-person platform team to consolidate CI, CD, and observability.",
   "failure_risks": [
     {

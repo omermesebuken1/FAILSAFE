@@ -1,6 +1,5 @@
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "Subscription web app that generates ATS-optimized resumes for college students using GPT-4. $9/month, freemium with 1 free resume. Solo founder, 6-month runway, marketing via TikTok and campus ambassadors.",
   "failure_risks": [
     {

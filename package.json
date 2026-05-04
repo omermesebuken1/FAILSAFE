@@ -13,7 +13,8 @@
     "src",
     "schema.json",
     "FAILSAFE.md",
-    "CLAUDE.md"
+    "CLAUDE.md",
+    "skill.md"
   ],
   "engines": {
     "node": ">=18"

@@ -1,6 +1,5 @@
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "Solo creator launching a weekly mechanical DIY YouTube channel with a Patreon tier, planning 52 videos in the first year alongside a full-time job.",
   "failure_risks": [
     {

@@ -1,20 +1,22 @@
 # FAILSAFE — Canonical Specification
 
-**Version:** 0.2
-**One-liner:** *If it fails, why?*
+**Version:** 0.3
+**One-liner:** *If this fails, why?*
 
-FAILSAFE is a thinking primitive: a 3-risk pre-mortem ending in a binding decision. It is invoked by name, executes in seconds, and produces a strict, machine-readable report.
+FAILSAFE is an anti-failure pre-mortem you run **with your AI pair** before (or during) building something. It surfaces the critical failure modes, decides which are solvable, and produces a strict, machine-readable report ending in **Continue / Pivot / Kill**.
+
+Built for the developer working alongside Claude, Codex, or any agentic AI. Invoke it by name. The agent does the rest.
 
 ---
 
 ## 1. Core
 
 ```
-FAILSAFE = 3 risks  →  3 action maps  →  1 decision
+FAILSAFE = up to 3 critical risks  →  action map per solvable risk  →  1 decision
 ```
 
-- **3 risks** — the most likely reasons this fails.
-- **3 action maps** — for each solvable risk, the smallest test that resolves it.
+- **Up to 3 risks** — only the *truly critical* failure modes. No padding to reach 3. No omission to stay under it. Minimum 1, maximum 3.
+- **Action map** — for each solvable risk, the smallest test that resolves it.
 - **1 decision** — Continue, Pivot, or Kill.
 
 That is the entire protocol.
@@ -25,8 +27,8 @@ That is the entire protocol.
 
 A FAILSAFE is **valid** only if it obeys all five.
 
-### Law 1 — Rule of Three
-Exactly 3 risks. Force prioritization. More risks dilute. Fewer skip critical failure modes.
+### Law 1 — Up to Three
+Generate up to 3 critical risks. Stop when you reach a non-critical one. Do not pad to reach 3. Do not skip a real fourth — if you have a real fourth, you have not yet ranked the top 3 sharply enough.
 
 ### Law 2 — Specificity
 A risk must name a concrete failure mode in this project's terms. If the risk could be copy-pasted to a different project, it is invalid.
@@ -42,17 +44,16 @@ Every FAILSAFE ends in exactly one of: **Continue**, **Pivot**, **Kill**. "Maybe
 
 ---
 
-## 3. Modes
+## 3. Audience
 
-### 3.1 Full Mode (default)
+FAILSAFE is built for a specific moment: **you are about to commit time, code, or focus to a project, and you are working with an AI agent.** That includes:
 
-3 risks, full action maps, used for go/no-go decisions on meaningful commitments (launches, hires, multi-week features, business pivots).
+- Spinning up a new feature with Claude Code as primary engineer
+- Pair-programming a refactor with Codex
+- Greenfielding a side project before it eats a weekend
+- Deciding whether to keep building or stop
 
-### 3.2 Lite Mode
-
-1 risk, 1 minimum test, 1 decision. Used for daily decisions: a feature you're about to spec, a side project you're about to start, a habit you're about to commit to.
-
-Lite mode preserves Laws 2–5. It relaxes Law 1 to "Rule of One" by design.
+It is not an enterprise risk register. It is not a board document. It is a primitive you call by name in your editor.
 
 ---
 
@@ -65,13 +66,6 @@ FAILSAFE <project>
 Run FAILSAFE on <project>
 FAILSAFE this: <project>
 /failsafe <project>
-```
-
-Lite mode:
-
-```
-FAILSAFE-lite <project>
-/failsafe-lite <project>
 ```
 
 The protocol name is the verb. *"I FAILSAFE'd it"* is valid usage.
@@ -101,6 +95,12 @@ Rules:
 - If `solvable: false` → `solver: "None"` and the action map fields are empty strings.
 - If `solvable: true` → `solver` is one of {User, AI, External, Mixed} and all action map fields are populated.
 
+Solver guide:
+- **User** — the project owner can resolve it directly.
+- **AI** — an AI agent can do most of the work (research, code, draft).
+- **External** — requires market validation, an expert, a third party, or a dependency to ship.
+- **Mixed** — combination of the above.
+
 ---
 
 ## 7. Action Map
@@ -123,7 +123,7 @@ If a field cannot be filled with a concrete answer, the risk is not solvable in 
 
 | Condition | Recommendation |
 |---|---|
-| All 3 risks solvable with reasonable effort | **Continue** |
+| All risks solvable with reasonable effort | **Continue** |
 | ≥1 critical risk threatens the direction, but the core idea survives changes | **Pivot** |
 | Core assumption invalid OR ≥2 risks unsolvable | **Kill** |
 
@@ -133,12 +133,9 @@ If a field cannot be filled with a concrete answer, the risk is not solvable in 
 
 Output is JSON only, conforming to `schema.json`. No prose before or after.
 
-### 9.1 Full Mode
-
 ```json
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "",
   "failure_risks": [
     {
@@ -159,21 +156,7 @@ Output is JSON only, conforming to `schema.json`. No prose before or after.
 }
 ```
 
-### 9.2 Lite Mode
-
-```json
-{
-  "failsafe_version": "0.2",
-  "mode": "lite",
-  "project_summary": "",
-  "failure_risk": {
-    "risk": "",
-    "root_cause_type": "Concept | Execution | Environment",
-    "minimum_test": ""
-  },
-  "final_recommendation": "Continue | Pivot | Kill"
-}
-```
+`failure_risks` contains 1 to 3 items.
 
 ---
 
@@ -185,11 +168,11 @@ A FAILSAFE is **invalid** if it falls into any of these:
 |---|---|---|
 | **Generic** | "Execution might be difficult." | Name the bottleneck. |
 | **Optimistic** | "All risks are solvable, just work harder." | Define the test. |
-| **Bloated** | 7 risks. | Cut to 3. |
+| **Padded** | A weak third risk because the user expected three. | Cut to the truly critical ones. |
 | **Indecisive** | "Maybe Continue, leaning Pivot." | Pick one. |
 | **Unfalsifiable** | "Validate product-market fit." | Define the metric and threshold. |
 | **Redesigned** | Evaluating an improved version of the project. | Evaluate as-is. |
-| **Padding** | Restating the project as a "risk." | Risk must describe a failure mode, not the goal. |
+| **Restated goal** | "The project might not succeed." | A risk describes a failure mode, not the absence of success. |
 
 Quality test: if the report could be copy-pasted to a different project without edits, it is wrong.
 
@@ -201,7 +184,7 @@ Quality test: if the report could be copy-pasted to a different project without 
 - Do not be polite or motivational.
 - Do not soften risks.
 - Do not hallucinate market data, statistics, or competitor names.
-- Do not add extra risks beyond the count required by mode.
+- Do not pad to reach 3 risks; do not omit critical ones to stay at 3 or fewer.
 - Do not skip structure.
 - Output JSON only when invoked.
 
@@ -209,7 +192,8 @@ Quality test: if the report could be copy-pasted to a different project without 
 
 ## 12. Versioning
 
-- `0.1` — Initial protocol (full mode only).
-- `0.2` — Added Five Laws, Lite Mode, formal anti-patterns, callable invocation syntax.
+- `0.1` — Initial protocol, exactly 3 risks.
+- `0.2` — Five Laws, lite mode, callable invocation, anti-patterns, validator.
+- `0.3` — Audience repositioned to AI-collab dev. Lite mode removed (single mode, 1-3 risks). Rule of Three softened to "Up to Three" with no padding.
 
-The `failsafe_version` field in the output declares the protocol version used.
+The `failsafe_version` field in every report declares the protocol version used.

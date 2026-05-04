@@ -1,0 +1,33 @@
+{
+  "failsafe_version": "0.3",
+  "project_summary": "Solo developer, vibe-coding with Claude Code, building a Chrome extension that uses a local LLM (Ollama + Llama 3.1 8B) to summarize open tabs on demand. Two-week ship target, freemium model on the Chrome Web Store, no telemetry by design.",
+  "failure_risks": [
+    {
+      "risk": "Local-LLM dependency requires the end user to install Ollama, download a 4-8GB model, and have 8GB+ RAM headroom; the addressable Chrome extension audience willing to do that setup is structurally tiny and will not produce enough installs to validate the freemium hypothesis.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Test whether the local-LLM setup friction is a launch blocker or only a niche-market constraint.",
+        "minimum_test": "Build a 5-minute onboarding video and a setup wizard. Run a 2-week beta with 100 invited users from r/LocalLLaMA and r/chrome_extensions. Track install-to-first-summary completion.",
+        "success_metric": "At least 40% of beta users complete setup within 24 hours of install AND at least 25% generate >=5 summaries in the first week.",
+        "failure_threshold": "Below 15% setup completion OR below 5% week-1 active usage.",
+        "next_action": "If pass: ship to the Chrome Web Store with the niche framing. If fail: pivot to a hosted-LLM tier (BYOK with OpenAI/Anthropic) and treat local-LLM as power-user mode."
+      }
+    },
+    {
+      "risk": "Chrome itself is shipping built-in AI (Gemini Nano via the Prompt API) with on-device tab and page summarization; a third-party extension solving the same problem may be obsolete by ship date or shortly after, killing distribution before product-market fit can compound.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "Mixed",
+      "action_map": {
+        "validation_step": "Determine whether Chrome's native AI ships in a form that fully replaces this extension, or leaves a usable wedge.",
+        "minimum_test": "Within 1 week, audit Chrome's current Built-in AI APIs (Summarizer, Prompt API). Build a head-to-head comparison: native vs. this extension on 20 real tab sets.",
+        "success_metric": "Extension wins on at least 2 of 4 dimensions: privacy (no Google account), model choice, output customization, multi-tab batching, in at least 12 of 20 test cases.",
+        "failure_threshold": "Native Chrome AI matches or beats the extension on all 4 dimensions in 16+ of 20 cases.",
+        "next_action": "If pass: lean into the differentiation in marketing copy. If fail: pivot to a feature Chrome's native AI cannot do (e.g., cross-device tab summary, team-shared summaries) before continuing."
+      }
+    }
+  ],
+  "final_recommendation": "Pivot"
+}

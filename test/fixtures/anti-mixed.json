@@ -1,6 +1,5 @@
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "Open-source project hoping to attract contributors and become a recognized standard in its category.",
   "failure_risks": [
     {

@@ -1,6 +1,5 @@
 {
-  "failsafe_version": "0.2",
-  "mode": "full",
+  "failsafe_version": "0.3",
   "project_summary": "A consumer mobile app for habit tracking targeting 18-30 year olds, freemium model with $4.99/mo Pro tier.",
   "failure_risks": [
     {

@@ -2,6 +2,8 @@ const fs = require('fs');
 
 const MIN_RISK_LENGTH = 80;
 const INDEPENDENCE_THRESHOLD = 0.5;
+const MIN_RISKS = 1;
+const MAX_RISKS = 3;
 
 const WEASEL_PATTERNS = [
   /\b(might|could|may) be (hard|difficult|tough|challenging|tricky)\b/i,
@@ -51,13 +53,11 @@ function lintReport(data) {
     return { ok: false, findings };
   }
 
-  if (data.mode === 'full') {
-    data.failure_risks.forEach((risk, i) => {
-      checkRisk(risk, `/failure_risks/${i}`, findings);
-    });
+  data.failure_risks.forEach((risk, i) => {
+    checkRisk(risk, `/failure_risks/${i}`, findings);
+  });
+  if (data.failure_risks.length > 1) {
     checkIndependence(data.failure_risks, findings);
-  } else {
-    checkLiteRisk(data.failure_risk, '/failure_risk', findings);
   }
 
   return { ok: findings.length === 0, findings };
@@ -69,27 +69,31 @@ function checkStructure(data) {
     findings.push({ rule: 'structure', path: '', message: 'not an object' });
     return findings;
   }
-  if (data.failsafe_version !== '0.2') {
-    findings.push({ rule: 'structure', path: '/failsafe_version', message: `expected "0.2", got ${JSON.stringify(data.failsafe_version)}` });
-  }
-  if (data.mode !== 'full' && data.mode !== 'lite') {
-    findings.push({ rule: 'structure', path: '/mode', message: `expected "full" or "lite", got ${JSON.stringify(data.mode)}` });
-    return findings;
+  if (data.failsafe_version !== '0.3') {
+    findings.push({
+      rule: 'structure',
+      path: '/failsafe_version',
+      message: `expected "0.3", got ${JSON.stringify(data.failsafe_version)}`,
+    });
   }
   if (typeof data.project_summary !== 'string' || data.project_summary.length === 0) {
     findings.push({ rule: 'structure', path: '/project_summary', message: 'missing or empty' });
   }
   if (!['Continue', 'Pivot', 'Kill'].includes(data.final_recommendation)) {
-    findings.push({ rule: 'structure', path: '/final_recommendation', message: 'must be Continue | Pivot | Kill' });
+    findings.push({
+      rule: 'structure',
+      path: '/final_recommendation',
+      message: 'must be Continue | Pivot | Kill',
+    });
   }
-  if (data.mode === 'full') {
-    if (!Array.isArray(data.failure_risks) || data.failure_risks.length !== 3) {
-      findings.push({ rule: 'rule-of-three', path: '/failure_risks', message: `expected exactly 3 risks, got ${Array.isArray(data.failure_risks) ? data.failure_risks.length : 'none'}` });
-    }
-  } else {
-    if (!data.failure_risk || typeof data.failure_risk !== 'object') {
-      findings.push({ rule: 'structure', path: '/failure_risk', message: 'missing or not an object' });
-    }
+  if (!Array.isArray(data.failure_risks)) {
+    findings.push({ rule: 'structure', path: '/failure_risks', message: 'must be an array' });
+  } else if (data.failure_risks.length < MIN_RISKS || data.failure_risks.length > MAX_RISKS) {
+    findings.push({
+      rule: 'risk-count',
+      path: '/failure_risks',
+      message: `expected ${MIN_RISKS}-${MAX_RISKS} risks (no padding, no omission), got ${data.failure_risks.length}`,
+    });
   }
   return findings;
 }
@@ -138,31 +142,6 @@ function checkRisk(risk, base, findings) {
         message: `${field} has no numeric or observable predicate`,
       });
     }
-  }
-}
-
-function checkLiteRisk(risk, base, findings) {
-  if (typeof risk.risk !== 'string' || risk.risk.length === 0) {
-    findings.push({ rule: 'structure', path: `${base}/risk`, message: 'missing or empty' });
-  } else {
-    if (risk.risk.length < MIN_RISK_LENGTH) {
-      findings.push({
-        rule: 'specificity-length',
-        path: `${base}/risk`,
-        message: `risk is ${risk.risk.length} chars (<${MIN_RISK_LENGTH})`,
-      });
-    }
-    const w = findWeasel(risk.risk);
-    if (w) findings.push({ rule: 'weasel', path: `${base}/risk`, message: `weasel phrase: "${w}"` });
-  }
-  if (typeof risk.minimum_test !== 'string' || risk.minimum_test.length === 0) {
-    findings.push({ rule: 'structure', path: `${base}/minimum_test`, message: 'missing or empty' });
-  } else if (!NUMERIC_OR_OBSERVABLE.test(risk.minimum_test)) {
-    findings.push({
-      rule: 'falsifiability',
-      path: `${base}/minimum_test`,
-      message: 'minimum_test has no numeric or observable predicate',
-    });
   }
 }
 
