@@ -1,0 +1,33 @@
+{
+  "failsafe_version": "0.3",
+  "project_summary": "log4u is a personal iOS app (SwiftUI/SwiftData) for solo builders to capture logs, todos, ideas, and decisions across iterative projects, with a local + Apple Intelligence AI tab that generates follow-up questions and suggestions from project history. The app is functionally complete for MVP; 33+ dev sessions have been invested primarily in AI tab engineering. Real-device CloudKit UAT is unfinished and the core capture loop has never been used on a real project for sustained periods.",
+  "failure_risks": [
+    {
+      "risk": "The core re-entry value proposition — 'open project after days away and know where you left off' — has never been tested against real logs from actual work. All 33+ sessions of UAT are same-session synthetic mocks created by the developer who built the heuristics. The two-step Log/Todo/Idea selection before every entry adds friction that may kill daily capture before any project memory accumulates.",
+      "root_cause_type": "Concept",
+      "solvable": true,
+      "solver": "User",
+      "action_map": {
+        "validation_step": "Use log4u as the sole record-keeping tool for one real active project (hardware, code, or creative) for 14 consecutive days. On day 8 and day 15, open the project cold and rate whether the AI tab Project Read and timeline give useful re-entry context without reading every log manually.",
+        "minimum_test": "30 real log entries (not mock-seeded) across 14 days; at least 2 re-entry sessions after a gap of 3+ days",
+        "success_metric": "Re-entry context rated 'useful — I knew what to do next without scrolling' in both re-entry sessions; daily log frequency ≥2 entries/day in the first week",
+        "failure_threshold": "Fewer than 20 real entries in 14 days, OR both re-entry sessions rated 'I still had to scroll everything to remember', OR the Log/Todo/Idea step is skipped by defaulting every entry to Log",
+        "next_action": "Stop all AI tab engineering immediately and begin 14-day real-project capture test. If failure threshold is hit, the capture step needs redesign before any further AI work."
+      }
+    },
+    {
+      "risk": "The AI tab's only path beyond keyword matching is Apple FoundationModels, which requires iOS 26+ — a beta OS as of 2026-05-04. The local fallback is Turkish-keyword heuristics tuned exclusively against developer-authored synthetic mocks; the diagnostics evaluator scores 100 on every mock because the mocks were written to match the rules. When FoundationModels generation errors occur (already observed during development), the fallback produces noisy suggestions that required multiple tuning passes per session even with synthetic data. There are zero accepted/rejected feedback signals from real project use.",
+      "root_cause_type": "Environment",
+      "solvable": true,
+      "solver": "Mixed",
+      "action_map": {
+        "validation_step": "On a physical device running a stable iOS 26 build, run Apple Analyze on 10 real project snapshots (not seeded mocks). Score each generated question as 'would answer', 'noisy/irrelevant', or 'wrong'. Separately record FoundationModels generation error rate.",
+        "minimum_test": "10 Apple Analyze runs on non-synthetic projects with real log content; log error rate and question accept/reject ratio",
+        "success_metric": "≥7/10 runs produce at least one question rated 'would answer'; FoundationModels generation error rate <20%",
+        "failure_threshold": "Fewer than 5/10 runs produce a useful question, OR FoundationModels throws errors >30% of runs, OR local fallback produces >2 false-positive suggestions per session on real projects",
+        "next_action": "If failure threshold hit: add Claude API (claude-haiku-4-5) as an external provider path behind a user-opt-in toggle rather than continuing local rule tuning. Do not invest further in heuristic refinement without real feedback signals."
+      }
+    }
+  ],
+  "final_recommendation": "Continue"
+}

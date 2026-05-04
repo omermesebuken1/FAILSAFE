@@ -126,8 +126,9 @@ The protocol name is the verb. *"I FAILSAFE'd it"* is valid usage.
 | SaaS startup | [`examples/startup-resume-builder.json`](examples/startup-resume-builder.json) | 3 | Pivot |
 | Product feature | [`examples/feature-realtime-collab.json`](examples/feature-realtime-collab.json) | 3 | Pivot |
 | Solo dev project (AI-collab) | [`examples/extension-tab-summarizer.json`](examples/extension-tab-summarizer.json) | 2 | Pivot |
+| iOS solo-dev app (real cold test) | [`examples/log4u.json`](examples/log4u.json) | 2 | Continue |
 
-The 2-risk example demonstrates the *no padding* rule: only two risks were truly critical, so only two are listed.
+The 2-risk examples demonstrate the *no padding* rule: only the truly critical risks are listed.
 
 ---
 

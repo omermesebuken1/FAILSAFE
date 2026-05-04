@@ -1,6 +1,6 @@
 {
   "name": "failsafe-protocol",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "FAILSAFE: 3-risk pre-mortem protocol — linter, schema, and spec.",
   "bin": {
     "failsafe": "bin/failsafe.js"
