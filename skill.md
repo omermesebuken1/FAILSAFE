@@ -42,7 +42,24 @@ A valid FAILSAFE obeys all five:
    - **Continue** — all risks solvable with reasonable effort
    - **Pivot** — ≥1 critical risk threatens direction; core idea survives changes
    - **Kill** — core assumption invalid OR ≥2 risks unsolvable
-5. Output JSON only, conforming to the contract below. No prose before or after.
+5. Produce the JSON object conforming to the contract below.
+6. Deliver the report as an HTML file using the **Rendering** rules.
+
+## Rendering
+
+Users read the report as HTML, not raw JSON. After producing the JSON:
+
+1. Save it to `failsafe-report.json` in the project root.
+2. Run this shell command:
+   ```
+   npx failsafe-protocol view failsafe-report.json
+   ```
+   This writes `failsafe-report.html` next to the JSON.
+3. Tell the user, in one short line, where the HTML file is. Do not paste the JSON into chat.
+
+If your environment cannot run shell commands, render the HTML yourself by reading `.failsafe/template.html` and substituting placeholders, then writing `failsafe-report.html`. HTML-escape text values.
+
+If the user explicitly asks for raw JSON only, emit JSON inline and skip HTML rendering.
 
 ## Solver Guide
 
@@ -89,7 +106,7 @@ A valid FAILSAFE obeys all five:
 - Action maps with vague metrics: *"validate PMF"*, *"iterate until good"*
 - Hedged decisions: *"maybe Continue"*
 - Hallucinated market data, statistics, or competitor names
-- Markdown commentary wrapping the JSON
+- Pasting JSON into chat instead of writing it to a file and rendering HTML
 
 Quality test: if the report could be copy-pasted to a different project, it is wrong.
 

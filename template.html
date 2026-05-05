@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAILSAFE Report</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --bg: #fafafa;
+  --fg: #111;
+  --muted: #666;
+  --card: #fff;
+  --border: #e5e5e5;
+  --accent: #0f766e;
+  --continue: #16a34a;
+  --pivot: #ca8a04;
+  --kill: #dc2626;
+  --concept: #7c3aed;
+  --execution: #2563eb;
+  --environment: #ea580c;
+  --shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0a0a;
+    --fg: #f5f5f5;
+    --muted: #999;
+    --card: #171717;
+    --border: #262626;
+    --accent: #14b8a6;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  }
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.brand {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.brand span { color: var(--accent); }
+
+h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0 0 1.75rem;
+  line-height: 1.45;
+}
+
+.decision {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.02em;
+}
+.decision::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.decision-continue { color: var(--continue); background: rgba(22, 163, 74, 0.12); }
+.decision-pivot    { color: var(--pivot);    background: rgba(202, 138, 4, 0.12); }
+.decision-kill     { color: var(--kill);     background: rgba(220, 38, 38, 0.12); }
+
+.risks { display: flex; flex-direction: column; gap: 1rem; }
+
+.risk {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.risk-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.risk-num {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-right: 0.25rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.65rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(0,0,0,0.05);
+  letter-spacing: 0.02em;
+}
+
+@media (prefers-color-scheme: dark) {
+  .badge { background: rgba(255,255,255,0.08); }
+}
+
+.badge-concept     { color: var(--concept);     background: rgba(124, 58, 237, 0.12); }
+.badge-execution   { color: var(--execution);   background: rgba(37, 99, 235, 0.12); }
+.badge-environment { color: var(--environment); background: rgba(234, 88, 12, 0.12); }
+.badge-solvable    { color: var(--continue);    background: rgba(22, 163, 74, 0.10); }
+.badge-unsolvable  { color: var(--kill);        background: rgba(220, 38, 38, 0.10); }
+
+.risk-text {
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.action-map {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.action-map > summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.action-map > summary::-webkit-details-marker { display: none; }
+
+.action-map > summary::before {
+  content: '\25B8';
+  font-size: 0.7rem;
+  transition: transform 0.15s ease;
+  color: var(--muted);
+}
+
+.action-map[open] > summary::before { transform: rotate(90deg); }
+
+.action-map > summary:hover { color: var(--fg); }
+
+.action-map dl {
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.action-map dt {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.action-map dd {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+footer {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.72rem;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+footer a:hover { text-decoration: underline; }
+
+button.copy-json {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+button.copy-json:hover {
+  color: var(--fg);
+  border-color: var(--muted);
+}
+
+@media print {
+  body { background: white; color: black; }
+  .risk { break-inside: avoid; box-shadow: none; }
+  button.copy-json { display: none; }
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">FAILSAFE <span>v{{failsafe_version}}</span></div>
+  <h1>{{project_summary}}</h1>
+  <div class="decision decision-{{decision_lower}}">{{final_recommendation}}</div>
+
+  <section class="risks">
+    {{#risks}}
+    <article class="risk">
+      <header class="risk-header">
+        <span class="risk-num">Risk {{risk_index}}</span>
+        <span class="badge badge-{{root_cause_type_lower}}">{{root_cause_type}}</span>
+        <span class="badge badge-{{solvable_class}}">{{solvable_label}}</span>
+        <span class="badge">{{solver}}</span>
+      </header>
+      <p class="risk-text">{{risk}}</p>
+      {{#has_action_map}}
+      <details class="action-map" open>
+        <summary>Action map</summary>
+        <dl>
+          <dt>Validation step</dt>
+          <dd>{{validation_step}}</dd>
+          <dt>Minimum test</dt>
+          <dd>{{minimum_test}}</dd>
+          <dt>Success metric</dt>
+          <dd>{{success_metric}}</dd>
+          <dt>Failure threshold</dt>
+          <dd>{{failure_threshold}}</dd>
+          <dt>Next action</dt>
+          <dd>{{next_action}}</dd>
+        </dl>
+      </details>
+      {{/has_action_map}}
+    </article>
+    {{/risks}}
+  </section>
+
+  <footer>
+    <span>Generated by <a href="https://github.com/omermesebuken1/failsafe-protocol">FAILSAFE Protocol</a></span>
+    <button class="copy-json" type="button" onclick="copyJson(this)">Copy JSON</button>
+  </footer>
+</main>
+<script type="application/json" id="failsafe-data">{{{json_data_raw}}}</script>
+<script>
+function copyJson(btn) {
+  var data = document.getElementById('failsafe-data').textContent;
+  navigator.clipboard.writeText(data).then(function () {
+    var original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(function () { btn.textContent = original; }, 1800);
+  });
+}
+</script>
+</body>
+</html>

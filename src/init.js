@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const BUNDLE_FILES = ['FAILSAFE.md', 'CLAUDE.md', 'schema.json'];
+const BUNDLE_FILES = ['FAILSAFE.md', 'CLAUDE.md', 'schema.json', 'template.html'];
 const SKILL_FILE = 'skill.md';
 const CLAUDE_SKILL_PATH = path.join('.claude', 'skills', 'failsafe.md');
 const AGENTS_FILE = 'AGENTS.md';
