@@ -6,17 +6,17 @@ const os = require('node:os');
 const { init } = require('../src/init');
 
 const PKG_ROOT = path.resolve(__dirname, '..');
-const BUNDLE_FILES = ['FAILSAFE.md', 'CLAUDE.md', 'schema.json'];
+const BUNDLE_FILES = ['FAILSAFE.md', 'CLAUDE.md', 'schema.json', 'template.html'];
 
 function tmp() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'failsafe-init-'));
 }
 
-test('init creates .failsafe/ with all three protocol files', () => {
+test('init creates .failsafe/ with all protocol files', () => {
   const dir = tmp();
   try {
     const result = init(dir);
-    assert.equal(result.written.length, 3);
+    assert.equal(result.written.length, BUNDLE_FILES.length);
     assert.equal(result.skipped.length, 0);
     for (const f of BUNDLE_FILES) {
       const dst = path.join(dir, '.failsafe', f);
@@ -48,7 +48,7 @@ test('init skips existing files without --force', () => {
     init(dir);
     fs.writeFileSync(path.join(dir, '.failsafe', 'CLAUDE.md'), 'modified');
     const result = init(dir);
-    assert.equal(result.skipped.length, 3);
+    assert.equal(result.skipped.length, BUNDLE_FILES.length);
     assert.equal(result.written.length, 0);
     assert.equal(
       fs.readFileSync(path.join(dir, '.failsafe', 'CLAUDE.md'), 'utf8'),
@@ -65,7 +65,7 @@ test('init with force overwrites existing files', () => {
     init(dir);
     fs.writeFileSync(path.join(dir, '.failsafe', 'CLAUDE.md'), 'modified');
     const result = init(dir, { force: true });
-    assert.equal(result.written.length, 3);
+    assert.equal(result.written.length, BUNDLE_FILES.length);
     assert.notEqual(
       fs.readFileSync(path.join(dir, '.failsafe', 'CLAUDE.md'), 'utf8'),
       'modified'

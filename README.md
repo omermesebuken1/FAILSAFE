@@ -50,7 +50,7 @@ This drops `.failsafe/` into your repo and wires the protocol into the AI surfac
 Run FAILSAFE on <one-line project description>
 ```
 
-The agent returns a strict JSON report.
+The agent writes `failsafe-report.json` and renders it to `failsafe-report.html`. Open the HTML in your browser — that's the report you read.
 
 ### Option B — Use it without installing anything
 
@@ -152,8 +152,9 @@ If your FAILSAFE could be copy-pasted to any other project, it's wrong.
 A zero-dependency Node CLI ships with the package.
 
 ```bash
-npx failsafe-protocol lint <report.json>...   # lint one or more reports
 npx failsafe-protocol init --all              # scaffold every supported surface
+npx failsafe-protocol lint <report.json>...   # lint one or more reports
+npx failsafe-protocol view <report.json>      # render JSON to a standalone HTML file
 ```
 
 The linter enforces what `schema.json` cannot:
@@ -179,8 +180,9 @@ On the bundled labeled set (3 valid examples + 6 anti-pattern fixtures), the lin
 | `CLAUDE.md` | Execution rules for AI agents |
 | `skill.md` | Drop-in skill file with frontmatter |
 | `schema.json` | Output contract |
+| `template.html` | Standalone HTML template for `failsafe view` |
 | `examples/` | Reference reports |
-| `bin/`, `src/` | CLI (init, lint) |
+| `bin/`, `src/` | CLI (init, lint, view) |
 | `test/` | Test suite + anti-pattern fixtures |
 
 ## License

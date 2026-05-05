@@ -1,12 +1,12 @@
 {
   "name": "failsafe-protocol",
-  "version": "0.3.0",
-  "description": "FAILSAFE: 3-risk pre-mortem protocol — linter, schema, and spec.",
+  "version": "0.4.0",
+  "description": "FAILSAFE: 1-3 risk pre-mortem protocol — linter, schema, spec, and HTML renderer.",
   "bin": {
     "failsafe": "bin/failsafe.js"
   },
   "scripts": {
-    "test": "node --test test/lint.test.js test/init.test.js"
+    "test": "node --test test/lint.test.js test/init.test.js test/render.test.js"
   },
   "files": [
     "bin",
@@ -14,7 +14,8 @@
     "schema.json",
     "FAILSAFE.md",
     "CLAUDE.md",
-    "skill.md"
+    "skill.md",
+    "template.html"
   ],
   "engines": {
     "node": ">=18"

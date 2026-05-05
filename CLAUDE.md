@@ -47,7 +47,29 @@ If you cannot satisfy a law, fix the report — do not ship it.
    - **Continue** — all risks solvable with reasonable effort.
    - **Pivot** — ≥1 critical risk threatens direction; core survives changes.
    - **Kill** — core assumption invalid OR ≥2 risks unsolvable.
-5. Output JSON only, conforming to `schema.json`. No prose before or after.
+5. Produce the JSON object conforming to `schema.json`.
+6. Deliver the report to the user as an HTML file. See **Rendering** below.
+
+---
+
+## Rendering
+
+Users read the report as HTML, not raw JSON. After producing a valid JSON object:
+
+1. Save it to `failsafe-report.json` in the project root.
+2. Render it to HTML by running this shell command:
+   ```
+   npx failsafe-protocol view failsafe-report.json
+   ```
+   This produces `failsafe-report.html` next to the JSON.
+3. Confirm to the user with one short line that points to the HTML file. Do not paste the JSON into chat.
+
+If you cannot run shell commands in your environment:
+- Read `.failsafe/template.html`.
+- Replace placeholders manually: `{{failsafe_version}}`, `{{project_summary}}`, `{{final_recommendation}}`, `{{decision_lower}}`, and inside each `{{#risks}}…{{/risks}}` block: `{{risk_index}}`, `{{risk}}`, `{{root_cause_type}}`, `{{root_cause_type_lower}}`, `{{solvable_label}}` (`Solvable`/`Unsolvable`), `{{solvable_class}}` (`solvable`/`unsolvable`), `{{solver}}`, `{{validation_step}}`, `{{minimum_test}}`, `{{success_metric}}`, `{{failure_threshold}}`, `{{next_action}}`. Sections wrapped in `{{#has_action_map}}…{{/has_action_map}}` are kept only when `solvable` is true. Substitute `{{{json_data_raw}}}` with the JSON serialized as a string. Write the result to `failsafe-report.html`.
+- HTML-escape all text values (`&`, `<`, `>`, `"`, `'`).
+
+If the user explicitly asks for raw JSON only (e.g. for piping or a script), skip the HTML step and emit JSON inline.
 
 ---
 
